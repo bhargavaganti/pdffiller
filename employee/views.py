@@ -119,15 +119,8 @@ def ind_print(request, id):
         'Fration':Indili.Fration,
         'Farogya':Indili.Farogya
     }
-    clean={}
-    for k, v in d.items():
-        if isinstance(v, dict):
-            nested = cleanNullTerms(v)
-        if len(nested.keys()) > 0:
-            clean[k] = nested
-        elif v is not None:
-            clean[k] = v
-    filer= write_fillable_pdf('indi.pdf','output.pdf', clean)
+
+    filer= write_fillable_pdf('indi.pdf','output.pdf', data)
     return filer
 
 def fam_print(request, id):
@@ -151,16 +144,8 @@ def fam_print(request, id):
         'Member_3_aadhar':Famili.Member_3_aadhar,
         'Member_4_aadhar':Famili.Member_4_aadhar
     }
-    clean={}
-    for k, v in d.items():
-        if isinstance(v, dict):
-            nested = cleanNullTerms(v)
-        if len(nested.keys()) > 0:
-            clean[k] = nested
-        elif v is not None:
-            clean[k] = v
-    
-    filer=write_fillable_pdf('fami.pdf','output.pdf', clean)
+   
+    filer=write_fillable_pdf('fami.pdf','output.pdf', data)
     return filer
 
 
