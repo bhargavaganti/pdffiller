@@ -1,0 +1,79 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Family Health Card Records</title>
+         {% load staticfiles %}
+                <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity
+                ="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    </head>
+    <body>
+    <table class="table table-striped table-bordered table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>Family Health Card ID</th>
+            <th>Full Name</th>
+            <th>Aadhar Card</th>
+            <th>Mobile</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for family in Families %}
+        <tr>
+            <td>{{ family.Fid }}</td>
+            <td>{{ family.Fname }}</td>
+            <td>{{ family.Faadhar }}</td>
+            <td>{{ family.Fcontact }}</td>
+            <td>
+                <a href="/fam/edit/{{ family.Fid }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+                <a href="/fam/delete/{{ family.Fid }}">Delete</a>
+                <a href="/fam/print/{{ family.Fid }}">Print</a>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <center><a href="/fam/add" class="btn btn-primary">Add New Family Record</a></center>
+    
+    <table class="table table-striped table-bordered table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>Individual Health Card ID</th>
+            <th>Full Name</th>
+            <th>Aadhar Card</th>
+            <th>Mobile</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for indy in Individuals %}
+        <tr>
+            <td>{{ indy.Fid }}</td>
+            <td>{{ indy.Fname }}</td>
+            <td>{{ indy.Faadhar }}</td>
+            <td>{{ indy.Fcontact }}</td>
+            <td>
+                <a href="/ind/edit/{{ indy.Fid }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+                <a href="/ind/delete/{{ indy.Fid }}">Delete</a>
+                <a href="/ind/print/{{ indy.Fid }}">Print</a>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <center><a href="/ind/add" class="btn btn-primary">Add New Individual Record</a></center>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgR
+        Vzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0
+        CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0
+        p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+    </html>
