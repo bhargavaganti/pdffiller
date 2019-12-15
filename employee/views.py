@@ -99,7 +99,7 @@ def write_fillable_pdf(file, output_pdf_path, data_dict):
 
 
 def ind_print(request, id):
-    Indili = Individuals.objects.get(Fid=id)
+    Indili = Individual.objects.get(Fid=id)
     Indili.pc = Indili.pc + 1
     Indili.save()
     data ={
