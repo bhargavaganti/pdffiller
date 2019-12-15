@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 from employee.forms import  FamilyForm, IndividualForm
 from employee.models import Individual, Family
 import os
-import pdb
 import pdfrw
 from django.http import HttpResponse
 from django.http import FileResponse
@@ -19,7 +18,6 @@ WIDGET_SUBTYPE_KEY = '/Widget'
 # Create your views here.
 def fam_new(request):
     if request.method == "POST":
-        pdb.set_trace()
         form = FamilyForm(request.POST)
         if form.is_valid():
             try:
