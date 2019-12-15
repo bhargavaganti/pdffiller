@@ -12,9 +12,9 @@ class Individual(models.Model):
     Faddress3 = models.CharField(max_length=100, blank=True, null=True)
     Fration = models.CharField(max_length=100, blank=True, null=True)
     Farogya = models.CharField(max_length=100, blank=True, null=True)
-    price = models.IntegerField(default=750)
-    pc = models.IntegerField(default=0)
-    paid =models.BooleanField(default=True)
+    price = models.IntegerField(default=750, blank=True, null=True)
+    pc = models.IntegerField(default=0, blank=True, null=True)
+    paid =models.BooleanField(default=True, blank=True, null=True)
 
     class Meta:
         db_table = "individual"
@@ -37,8 +37,8 @@ class Family(models.Model):
     Member_3_aadhar = models.CharField(max_length=20, blank=True, null=True)
     Member_4_name = models.CharField(max_length=100, blank=True, null=True)
     Member_4_aadhar = models.CharField(max_length=20, blank=True, null=True)
-    pc = models.IntegerField(default=0)
-    price = models.IntegerField(default=1350)
-    paid =models.BooleanField(default=True)
+    pc = models.IntegerField(default=0, blank=True, null=True)
+    price = models.IntegerField(default=1350, blank=True, null=True)
+    paid =models.BooleanField(default=True, blank=True, null=True)
     class Meta:
         db_table = "family"

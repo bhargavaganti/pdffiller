@@ -61,6 +61,8 @@ def ind_new(request):
             return redirect('/')
         except:
             pass
+    else:
+        form = IndividualForm()
     return render(request, 'ind_add.html', {'form': form})
 
 

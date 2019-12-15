@@ -74,8 +74,6 @@ WSGI_APPLICATION = 'pdffiller.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# DATABSES='mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(user='nklab9yn_crud', password='Crud123', server='119.18.58.38', database='nklab9yn_akshaya')
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
