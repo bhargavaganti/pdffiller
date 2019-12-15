@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('fam/add', views.fam_new),
     path('', views.fam_show),
+    path('back', views.back),
     path('fam/edit/<int:id>', views.fam_edit),
     path('fam/update/<int:id>', views.fam_update),
     path('fam/update/<int:id>', views.fam_update),

@@ -108,6 +108,8 @@ def write_fillable_pdf(file, output_pdf_path, data_dict):
 
 def ind_print(request, id):
     Indili = Individuals.objects.get(Fid=id)
+    Indili.pc = Indili.pc + 1
+    Indili.save()
     data ={
         'Fid': 'AH/HC/I00'+ str(Indili.Fid),
         'Fname': Indili.Fname,
@@ -119,12 +121,13 @@ def ind_print(request, id):
         'Fration':Indili.Fration,
         'Farogya':Indili.Farogya
     }
-
     filer= write_fillable_pdf('indi.pdf','output.pdf', data)
     return filer
 
 def fam_print(request, id):
     Famili = Family.objects.get(Fid=id)
+    Famili.pc = Famili.pc + 1
+    Famili.save()
     data ={
         'Fid': 'AH/HC/S00'+ str(Famili.Fid),
         'Fname': Famili.Fname,
@@ -144,7 +147,6 @@ def fam_print(request, id):
         'Member_3_aadhar':Famili.Member_3_aadhar,
         'Member_4_aadhar':Famili.Member_4_aadhar
     }
-   
     filer=write_fillable_pdf('fami.pdf','output.pdf', data)
     return filer
 
@@ -153,3 +155,10 @@ def ind_destroy(request, id):
     indili = Family.objects.get(Fid=id)
     indili.delete()
     return redirect("/")
+
+def back(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    out_dir = os.path.join(BASE_DIR,"back.pdf")
+    filer = open(out_dir, 'rb')
+    resp=FileResponse(filer)
+    return resp
