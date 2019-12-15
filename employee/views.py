@@ -19,12 +19,11 @@ WIDGET_SUBTYPE_KEY = '/Widget'
 def fam_new(request):
     if request.method == "POST":
         form = FamilyForm(request.POST)
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect('/')
-            except:
-                pass
+        try:
+            form.save()
+            return redirect('/')
+        except:
+            pass
     else:
         form = FamilyForm()
     return render(request, 'fam_add.html', {'form': form})
@@ -44,11 +43,9 @@ def fam_edit(request, id):
 def fam_update(request, id):
     famili = Family.objects.get(Fid=id)
     form = FamilyForm(request.POST, instance=famili)
-    if form.is_valid():
-        form.save()
-        return redirect("/")
-    return render(request, 'fam_edit.html', {'famili': famili})
-
+    form.save()
+    return redirect("/")
+    
 
 def fam_destroy(request, id):
     famili = Family.objects.get(Fid=id)
@@ -59,14 +56,11 @@ def fam_destroy(request, id):
 def ind_new(request):
     if request.method == "POST":
         form = IndividualForm(request.POST)
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect('/')
-            except:
-                pass
-    else:
-        form = IndividualForm()
+        try:
+            form.save()
+            return redirect('/')
+        except:
+            pass
     return render(request, 'ind_add.html', {'form': form})
 
 
@@ -78,11 +72,9 @@ def ind_edit(request, id):
 def ind_update(request, id):
     Indili = Individuals.objects.get(Fid=id)
     form = IndividualForm(request.POST, instance=Indili)
-    if form.is_valid():
-        form.save()
-        return redirect("/")
-    return render(request, 'ind_edit.html', {'Indili': Indili})
-
+    form.save()
+    return redirect("/")
+    
 
 def write_fillable_pdf(file, output_pdf_path, data_dict):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
