@@ -1,5 +1,4 @@
 Django==2.2.7
-mysqlclient==1.4.6
 pdfrw==0.4
 python-decouple==3.3
 pytz==2019.3

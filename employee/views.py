@@ -147,7 +147,7 @@ def fam_print(request, id):
 
 
 def ind_destroy(request, id):
-    indili = Family.objects.get(Fid=id)
+    indili = Individual.objects.get(Fid=id)
     indili.delete()
     return redirect("/")
 
