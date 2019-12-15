@@ -88,6 +88,7 @@ def write_fillable_pdf(file, output_pdf_path, data_dict):
         if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
             if annotation[ANNOT_FIELD_KEY]:
                 key = annotation[ANNOT_FIELD_KEY][1:-1]
+                print(key)
                 if key in data_dict.keys():
                     annotation.update(
                         pdfrw.PdfDict(V='{}'.format(data_dict[key]))
@@ -103,17 +104,18 @@ def ind_print(request, id):
     Indili.pc = Indili.pc + 1
     Indili.save()
     data ={
-        'Fid': 'AH/HC/I00'+ str(Indili.Fid),
-        'Fname': Indili.Fname,
-        'Fcontact': Indili.Fcontact,
+        'Fid': 'AH/HC-I/0'+ str(Indili.Fid),
+        'Fname1': Indili.Fname,
         'Faadhar': Indili.Faadhar,
+        'Fcontact': Indili.Fcontact,
         'Faddress1': Indili.Faddress1,
         'Faddress2':Indili.Faddress2,
         'Faddress3':Indili.Faddress3,
         'Fration':Indili.Fration,
-        'Farogya':Indili.Farogya
+        'Farogya':Indili.Farogya,
+        'Faadhar1': Indili.Faadhar
     }
-    filer= write_fillable_pdf('indi.pdf','output.pdf', data)
+    filer= write_fillable_pdf('self.pdf','output.pdf', data)
     return filer
 
 def fam_print(request, id):
@@ -121,10 +123,10 @@ def fam_print(request, id):
     Famili.pc = Famili.pc + 1
     Famili.save()
     data ={
-        'Fid': 'AH/HC/S00'+ str(Famili.Fid),
+        'Fid': 'AH/HC-F/0'+ str(Famili.Fid),
         'Fname': Famili.Fname,
-        'Fcontact': Famili.Fcontact,
         'Faadhar': Famili.Faadhar,
+        'Fcontact': Famili.Fcontact,
         'Faddress1': Famili.Faddress1,
         'Faddress2':Famili.Faddress2,
         'Faddress3':Famili.Faddress3,
@@ -137,9 +139,10 @@ def fam_print(request, id):
         'Member_1_aadhar':Famili.Member_1_aadhar,
         'Member_2_aadhar':Famili.Member_2_aadhar,
         'Member_3_aadhar':Famili.Member_3_aadhar,
-        'Member_4_aadhar':Famili.Member_4_aadhar
+        'Member_4_aadhar':Famili.Member_4_aadhar,
+        'Faadhar1': Famili.Faadhar
     }
-    filer=write_fillable_pdf('fami.pdf','output.pdf', data)
+    filer=write_fillable_pdf('family.pdf','output.pdf', data)
     return filer
 
 
