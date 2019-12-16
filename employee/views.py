@@ -6,6 +6,7 @@ from employee.forms import  FamilyForm, IndividualForm
 from employee.models import Individual, Family
 import os
 import pdfrw
+from pdfrw import PdfReader, PdfWriter, PageMerge
 from django.http import HttpResponse
 from django.http import FileResponse
 ANNOT_KEY = '/Annots'
@@ -115,7 +116,7 @@ def ind_print(request, id):
         'Farogya':Indili.Farogya,
         'Faadhar1': Indili.Faadhar
     }
-    filer= write_fillable_pdf('self.pdf','output.pdf', data)
+    filer= write_fillable_pdf('self1.pdf','output.pdf', data)
     return filer
 
 def fam_print(request, id):
@@ -142,7 +143,7 @@ def fam_print(request, id):
         'Member_4_aadhar':Famili.Member_4_aadhar,
         'Faadhar1': Famili.Faadhar
     }
-    filer=write_fillable_pdf('family.pdf','output.pdf', data)
+    filer=write_fillable_pdf('family1.pdf','output.pdf', data)
     return filer
 
 
