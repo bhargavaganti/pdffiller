@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from employee import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('fam/add', views.fam_new),
-    path('', views.fam_show),
+    path('', TemplateView.as_view(template_name='index.html')),
+    path('fam_show', views.fam_show),
+    path('ind_show', views.ind_show),
     path('back', views.back),
     path('fam/edit/<int:id>', views.fam_edit),
     path('fam/update/<int:id>', views.fam_update),
