@@ -1,4 +1,6 @@
 Django==2.2.7
+django-filter==2.2.0
+django-widget-tweaks==1.4.5
 pdfrw==0.4
 python-decouple==3.3
 pytz==2019.3
