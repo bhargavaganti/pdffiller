@@ -141,7 +141,6 @@ def fam_print(id):
     Famili = Family.objects.get(Fid=id)
     Famili.pc = Famili.pc + 1
     Famili.save()
-    pdb.set_trace()
     data ={
         'Fid': 'AH/HC-F/0'+ str(Famili.Fid),
         'Fname': Famili.Fname,
