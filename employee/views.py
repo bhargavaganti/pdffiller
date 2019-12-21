@@ -98,7 +98,7 @@ def ind_update(request, id):
     
 
 def write_fillable_pdf(file, output_pdf_path, data_dict):
-    out_dir = os.path.join(BASE_DIR,"tmp/"+data_dict['Fname1']+"."+data_dict['Fid']+".pdf")
+    out_dir = os.path.join(BASE_DIR,"tmp/"+data_dict['Fname']+"."+data_dict['Fid']+".pdf")
     INVOICE_TEMPLATE_PATH = os.path.join(BASE_DIR,file)
     template_pdf = pdfrw.PdfReader(INVOICE_TEMPLATE_PATH)
     annotations = template_pdf.pages[0][ANNOT_KEY]
@@ -122,7 +122,7 @@ def ind_print(id):
 
     data ={
         'Fid': 'AH/HC-I/0'+ str(Indili.Fid),
-        'Fname1': Indili.Fname,
+        'Fname': Indili.Fname,
         'Faadhar': Indili.Faadhar,
         'Fcontact': Indili.Fcontact,
         'Faddress1': Indili.Faddress1,
