@@ -23,8 +23,8 @@
         <th>Aadhar Card</th>
         <th>Mobile</th>
         <th>Print Count</th>
+        <th>Is Paid</th>
         <th>
-            <!-- <a href="/fam/print/{{ indy.Fid }}">Print</a> -->
             <button type="submit" name="print">Print</button>
         </th>
     </tr>
@@ -38,9 +38,11 @@
         <td>{{ indy.Faadhar }}</td>
         <td>{{ indy.Fcontact }}</td>
         <td>{{ indy.pc }}</td>
+        <td>{{ indy.paid }}</td>
         <td>
-        <a href="/fam/edit/{{ indy.Fid }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
-        <a href="/fam/delete/{{ indy.Fid }}">Delete</a>
+        <a href="/ind/paid/{{ indy.Fid }}">Update paid</a>
+        <a href="/ind/edit/{{ indy.Fid }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+        <a href="/ind/delete/{{ indy.Fid }}">Delete</a>
         </td>
     </tr>
 {% endfor %}
@@ -49,7 +51,7 @@
 </form>
 <br>
 <br>
-<center><a href="/fam/add" class="btn btn-primary">Add New indy Record</a></center>
+<center><a href="/ind/add" class="btn btn-primary">Add New individual Record</a></center>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgR
     Vzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

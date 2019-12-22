@@ -20,17 +20,21 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('fam/add', views.fam_new),
     path('', TemplateView.as_view(template_name='index.html')),
-    path('fam_show', views.fam_show),
-    path('ind_show', views.ind_show),
     path('back', views.back),
+
+    #Family Record URL's
+    path('fam_show', views.fam_show),
+    path('fam/add', views.fam_new),
     path('fam/edit/<int:id>', views.fam_edit),
     path('fam/update/<int:id>', views.fam_update),
-    path('fam/update/<int:id>', views.fam_update),
+    path('fam/paid/<int:id>', views.fam_paid),
     path('fam/print/<int:id>', views.fam_print),
     path('fam/delete/<int:id>', views.fam_destroy),
+    ##Individual Record URL's
+    path('ind_show', views.ind_show),
     path('ind/add', views.ind_new),
+    path('ind/paid/<int:id>', views.ind_paid),
     path('ind/edit/<int:id>', views.ind_edit),
     path('ind/update/<int:id>', views.ind_update),
     path('ind/print/<int:id>', views.ind_print),

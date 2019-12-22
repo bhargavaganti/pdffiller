@@ -22,20 +22,9 @@ SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Create your views here.
-def fam_new(request):
-    if request.method == "POST":
-        form = FamilyForm1(request.POST)
-        try:
-            form.save()
-            return redirect('/fam_show')
-        except:
-            pass
-    else:
-        form = FamilyForm()
-    return render(request, 'fam_add.html', {'form': form})
 
 
+# Create your views here for family Health CArd.
 def fam_show(request):
     files=[]
     out_dir = os.path.join(BASE_DIR,'scale.pdf')
@@ -51,8 +40,19 @@ def fam_show(request):
             return file
     Families = Family.objects.all()
     return render(request, 'fam_show.html', {'Families': Families})
-    # family_filter = FamilyFilter(request.GET, queryset=Families)
-    
+
+
+def fam_new(request):
+    if request.method == "POST":
+        form = FamilyForm1(request.POST)
+        try:
+            form.save()
+            return redirect('/fam_show')
+        except:
+            pass
+    else:
+        form = FamilyForm()
+    return render(request, 'fam_add.html', {'form': form})
 
 
 def fam_edit(request, id):
@@ -66,77 +66,6 @@ def fam_update(request, id):
     form.save()
     return redirect("/fam_show")
     
-
-def fam_destroy(request, id):
-    famili = Family.objects.get(Fid=id)
-    famili.delete()
-    return redirect("/fam_show")
-
-# Create your views here.
-def ind_new(request):
-    if request.method == "POST":
-        form = IndividualForm1(request.POST)
-        try:
-            form.save()
-            return redirect('/ind_show')
-        except:
-            pass
-    else:
-        form = IndividualForm()
-    return render(request, 'ind_add.html', {'form': form})
-
-
-def ind_edit(request, id):
-    indili = Family.objects.get(Fid=id)
-    return render(request, 'ind_edit.html', {'indily': indili})
-
-
-def ind_update(request, id):
-    Indili = Individuals.objects.get(Fid=id)
-    form = IndividualForm(request.POST, instance=Indili)
-    form.save()
-    return redirect("/ind_show")
-    
-
-def write_fillable_pdf(file, output_pdf_path, data_dict):
-    out_dir = os.path.join(BASE_DIR,"tmp/"+str(random.randrange(20, 50, 3))+data_dict['Fname']+".pdf")
-    INVOICE_TEMPLATE_PATH = os.path.join(BASE_DIR,file)
-    template_pdf = pdfrw.PdfReader(INVOICE_TEMPLATE_PATH)
-    annotations = template_pdf.pages[0][ANNOT_KEY]
-    for annotation in annotations:
-        if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-            if annotation[ANNOT_FIELD_KEY]:
-                key = annotation[ANNOT_FIELD_KEY][1:-1]
-                if key in data_dict.keys():
-                    annotation.update(
-                        pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-                    )
-    pdfrw.PdfWriter().write(out_dir, template_pdf)
-    return out_dir
-
-
-def ind_print(id):
-
-    Indili = Individual.objects.get(Fid=id)
-    Indili.pc = Indili.pc + 1
-    Indili.save()
-
-    data ={
-        'Fid': 'AH/HC-I/0'+ str(Indili.Fid),
-        'Fname': Indili.Fname,
-        'Faadhar': Indili.Faadhar,
-        'Fcontact': Indili.Fcontact,
-        'Faddress1': Indili.Faddress1,
-        'Faddress2':Indili.Faddress2,
-        'Faddress3':Indili.Faddress3,
-        'Fration':Indili.Fration,
-        'Farogya':Indili.Farogya,
-        'Faadhar1': Indili.Faadhar,
-        'from_date': 'From:'+str((Indili.from_date).strftime("%b %d %Y")),
-        'to_date': 'To:'+str((Indili.to_date).strftime("%b %d %Y")),
-    }
-    return data
-
 def fam_print(id):
 
     Famili = Family.objects.get(Fid=id)
@@ -165,6 +94,68 @@ def fam_print(id):
         'to_date': 'To:'+str((Famili.to_date).strftime("%b %d %Y")),
     }
     return data
+ 
+def fam_destroy(request, id):
+    famili = Family.objects.get(Fid=id)
+    famili.delete()
+    return redirect("/fam_show")
+
+def fam_paid(request, id):
+    famili = Family.objects.get(Fid=id)
+    if famili.paid is False:
+        famili.paid = True
+        famili.save()
+    return redirect("/fam_show")
+
+# Create your views here for Individual Health Cards.
+
+def ind_new(request):
+    if request.method == "POST":
+        form = IndividualForm1(request.POST)
+        try:
+            form.save()
+            return redirect('/ind_show')
+        except:
+            pass
+    else:
+        form = IndividualForm1()
+        return render(request, 'ind_add.html', {'form': form})
+
+
+def ind_edit(request, id):
+    indili = Individual.objects.get(Fid=id)
+    return render(request, 'ind_edit.html', {'indily': indili})
+
+
+def ind_update(request, id):
+    Indili = Individual.objects.get(Fid=id)
+    form = IndividualForm1(request.POST, instance=Indili)
+    form.save()
+    return redirect("/ind_show")
+
+def ind_print(id):
+
+    Indili = Individual.objects.get(Fid=id)
+    Indili.pc = Indili.pc + 1
+    Indili.save()
+
+    data ={
+        'Fid': 'AH/HC-I/0'+ str(Indili.Fid),
+        'Fname1': Indili.Fname,
+        'Faadhar': Indili.Faadhar,
+        'Fcontact': Indili.Fcontact,
+        'Faddress1': Indili.Faddress1,
+        'Faddress2':Indili.Faddress2,
+        'Faddress3':Indili.Faddress3,
+        'Fration':Indili.Fration,
+        'Farogya':Indili.Farogya,
+        'Faadhar1': Indili.Faadhar,
+        'from_date': 'From:'+str((Indili.from_date).strftime("%b %d %Y")),
+        'to_date': 'To:'+str((Indili.to_date).strftime("%b %d %Y")),
+    }
+    return data
+
+
 
 def ind_show(request):
     files=[]
@@ -173,7 +164,7 @@ def ind_show(request):
     if request.method=="POST":
         if 'print' in request.POST:
             for item in request.POST.getlist('my_object'):
-                data =  fam_print(item)
+                data =  ind_print(item)
                 path=write_fillable_pdf('self.pdf',out_dir1, data)
                 files.append(path)
             path=concatenate(files,out_dir)
@@ -188,6 +179,15 @@ def ind_destroy(request, id):
     indili.delete()
     return redirect("/ind_show")
 
+def ind_paid(request, id):
+    indili = Individual.objects.get(Fid=id)
+    if indili.paid is False:
+        indili.paid = True
+        indili.save(update_fields=["paid"])
+    return redirect("/ind_show")
+
+# Create your views here for Generic Functions.
+
 def back(request):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     out_dir = os.path.join(BASE_DIR,"back.pdf")
@@ -195,10 +195,26 @@ def back(request):
     resp=FileResponse(filer)
     return resp
 
+def write_fillable_pdf(file, output_pdf_path, data_dict):
+    out_dir = os.path.join(BASE_DIR,"tmp/"+str(random.randrange(20, 200, 3))+".pdf")
+    INVOICE_TEMPLATE_PATH = os.path.join(BASE_DIR,file)
+    template_pdf = pdfrw.PdfReader(INVOICE_TEMPLATE_PATH)
+    annotations = template_pdf.pages[0][ANNOT_KEY]
+    for annotation in annotations:
+        if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+            if annotation[ANNOT_FIELD_KEY]:
+                key = annotation[ANNOT_FIELD_KEY][1:-1]
+                print (key)
+                if key in data_dict.keys():
+                    annotation.update(
+                        pdfrw.PdfDict(V='{}'.format(data_dict[key]))
+                    )
+    pdfrw.PdfWriter().write(out_dir, template_pdf)
+    return out_dir
+
 def concatenate(paths, path1):
     writer = PdfWriter()
     out_dir = os.path.join(BASE_DIR,"sample.pdf")
-
     for path in paths:
         reader = PdfReader(path)
         writer.addpages(reader.pages)
@@ -212,3 +228,6 @@ def concatenate(paths, path1):
  
     writer.write(out_dir)
     return out_dir
+
+
+

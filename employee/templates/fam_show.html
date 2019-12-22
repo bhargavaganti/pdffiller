@@ -23,6 +23,7 @@
             <th>Aadhar Card</th>
             <th>Mobile</th>
             <th>Print Count</th>
+            <th>Is Paid</th>
             <th>
                 <!-- <a href="/fam/print/{{ family.Fid }}">Print</a> -->
                 <button type="submit" name="print">Print</button>
@@ -38,7 +39,9 @@
             <td>{{ family.Faadhar }}</td>
             <td>{{ family.Fcontact }}</td>
             <td>{{ family.pc }}</td>
+            <td>{{ family.paid }}</td>
             <td>
+            <a href="/fam/paid/{{ family.Fid }}">Update paid</a>
             <a href="/fam/edit/{{ family.Fid }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
             <a href="/fam/delete/{{ family.Fid }}">Delete</a>
             </td>

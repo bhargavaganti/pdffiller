@@ -1,4 +1,5 @@
 from django import forms
+
 from employee.models import Individual, Family
 import pdb
 
@@ -16,6 +17,7 @@ class FamilyForm(forms.ModelForm):
         return False
 
 class FamilyForm1(forms.ModelForm):
+
     class Meta:
         model = Family
         fields = "__all__"
