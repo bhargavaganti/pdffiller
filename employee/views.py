@@ -204,7 +204,6 @@ def write_fillable_pdf(file, output_pdf_path, data_dict):
         if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
             if annotation[ANNOT_FIELD_KEY]:
                 key = annotation[ANNOT_FIELD_KEY][1:-1]
-                print (key)
                 if key in data_dict.keys():
                     annotation.update(
                         pdfrw.PdfDict(V='{}'.format(data_dict[key]))
