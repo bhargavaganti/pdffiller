@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html')),
     path('back', views.back),
-
+    path('pdf', views.pdf),
     #Family Record URL's
     path('fam_show', views.fam_show),
     path('fam/add', views.fam_new),

@@ -10,6 +10,10 @@ from employee.models import Individual, Family
 import os
 import pdfrw
 from pdfrw import PdfReader, PdfWriter, PageMerge, IndirectPdfDict
+from PyPDF2 import PdfFileMerger
+from PyPDF2.generic import BooleanObject, NameObject, IndirectObject, NumberObject
+from io import BytesIO
+import PyPDF2
 from django.http import HttpResponse
 from django.http import FileResponse
 from employee.filters import FamilyFilter, IndividualFilter
@@ -33,9 +37,10 @@ def fam_show(request):
         if 'print' in request.POST:
             for item in request.POST.getlist('my_object'):
                 data =  fam_print(item)
-                path=write_fillable_pdf('family.pdf',out_dir1, data)
+                pdb.set_trace()
+                path=write_fillable_pdf('family1.pdf',out_dir1, data)
                 files.append(path)
-            path=concatenate(files,out_dir)
+            path=merger(files)
             file= FileResponse(open(path,'rb'))
             return file
     Families = Family.objects.all()
@@ -165,7 +170,7 @@ def ind_show(request):
         if 'print' in request.POST:
             for item in request.POST.getlist('my_object'):
                 data =  ind_print(item)
-                path=write_fillable_pdf('self.pdf',out_dir1, data)
+                path=write_fillable_pdf('self1.pdf',out_dir1, data)
                 files.append(path)
             path=concatenate(files,out_dir)
             file= FileResponse(open(path,'rb'))
@@ -198,35 +203,120 @@ def back(request):
 def write_fillable_pdf(file, output_pdf_path, data_dict):
     out_dir = os.path.join(BASE_DIR,"tmp/"+str(random.randrange(20, 200, 3))+".pdf")
     INVOICE_TEMPLATE_PATH = os.path.join(BASE_DIR,file)
-    template_pdf = pdfrw.PdfReader(INVOICE_TEMPLATE_PATH)
-    annotations = template_pdf.pages[0][ANNOT_KEY]
-    for annotation in annotations:
-        if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-            if annotation[ANNOT_FIELD_KEY]:
-                key = annotation[ANNOT_FIELD_KEY][1:-1]
-                if key in data_dict.keys():
-                    annotation.update(
-                        pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-                    )
-    pdfrw.PdfWriter().write(out_dir, template_pdf)
+    input_stream = open(INVOICE_TEMPLATE_PATH, "rb")
+    pdf_reader = PyPDF2.PdfFileReader(input_stream, strict=False)
+    if "/AcroForm" in pdf_reader.trailer["/Root"]:
+        pdf_reader.trailer["/Root"]["/AcroForm"].update(
+            {NameObject("/NeedAppearances"): BooleanObject(True)})
+    pdf_writer = PyPDF2.PdfFileWriter()
+    set_need_appearances_writer(pdf_writer)
+    if "/AcroForm" in pdf_writer._root_object:
+        # Acro form is form field, set needs appearances to fix printing issues
+        pdf_writer._root_object["/AcroForm"].update(
+            {NameObject("/NeedAppearances"): BooleanObject(True)})
+    pdf_writer.addPage(pdf_reader.getPage(0))
+    page = pdf_writer.getPage(0)
+    pdf_writer.updatePageFormFieldValues(page, data_dict)
+    for j in range(0, len(page['/Annots'])):
+        writer_annot = page['/Annots'][j].getObject()
+        for field in data_dict:
+            # -----------------------------------------------------BOOYAH!
+            if writer_annot.get('/T') == field:
+                writer_annot.update({
+                    NameObject("/Ff"): NumberObject(1)
+                })
+             # -----------------------------------------------------
+    output_stream = BytesIO()
+    pdf_writer.write(output_stream)
+    with open(out_dir,'wb') as d: ## Open temporary file as bytes
+        d.write(output_stream.read())
+    input_stream.close()
     return out_dir
 
-def concatenate(paths, path1):
-    writer = PdfWriter()
-    out_dir = os.path.join(BASE_DIR,"sample.pdf")
-    for path in paths:
-        reader = PdfReader(path)
-        writer.addpages(reader.pages)
+def merger(input_paths):
+    output_path = os.path.join(BASE_DIR,"sample.pdf")
+    pdf_merger = PdfFileMerger()
+    file_handles = []
  
-    writer.trailer.Info = IndirectPdfDict(
-        Title='Merged',
-        Author='Bhargava Ganti',
-        Subject='PDF Combinations',
-        Creator='The Concatenator'
-    )
+    for path in input_paths:
+        pdf_merger.append(path)
  
-    writer.write(out_dir)
-    return out_dir
+    with open(output_path, 'wb') as fileobj:
+        pdb.set_trace()
+        pdf_merger.write(fileobj)
+        return output_path
 
 
 
+def pdf(request):
+    template = os.path.join(BASE_DIR,"family1.pdf")
+
+    outfile = os.path.join(BASE_DIR,"sample.pdf")
+
+    input_stream = open(template, "rb")
+    pdf_reader = PyPDF2.PdfFileReader(input_stream, strict=False)
+    if "/AcroForm" in pdf_reader.trailer["/Root"]:
+        pdf_reader.trailer["/Root"]["/AcroForm"].update(
+            {NameObject("/NeedAppearances"): BooleanObject(True)})
+
+    pdf_writer = PyPDF2.PdfFileWriter()
+    set_need_appearances_writer(pdf_writer)
+    if "/AcroForm" in pdf_writer._root_object:
+        # Acro form is form field, set needs appearances to fix printing issues
+        pdf_writer._root_object["/AcroForm"].update(
+            {NameObject("/NeedAppearances"): BooleanObject(True)})
+
+    data_dict = {
+        'Fid': 'John\n',
+        'Fname1': 'Smith\n',
+        'Faadhar': 'mail@mail.com\n',
+        'Fcontact': '889-998-9967\n',
+        'Faddress1': 'Amazing Inc.\n',
+        'Faddress2': 'Dev\n',
+        'Faddress3': '123 Main Way\n',
+        'Fration': 'Johannesburg\n',
+        'Farogya': 'New Mexico\n',
+        'Faadhar1': 96705,
+        'from_date': 'USA\n',
+        'to_date': 'Who cares...\n'
+
+    }
+
+    pdf_writer.addPage(pdf_reader.getPage(0))
+    page = pdf_writer.getPage(0)
+    pdf_writer.updatePageFormFieldValues(page, data_dict)
+    for j in range(0, len(page['/Annots'])):
+        writer_annot = page['/Annots'][j].getObject()
+        for field in data_dict:
+            # -----------------------------------------------------BOOYAH!
+            if writer_annot.get('/T') == field:
+                writer_annot.update({
+                    NameObject("/Ff"): NumberObject(1)
+                })
+             # -----------------------------------------------------
+    output_stream = BytesIO()
+    pdf_writer.write(output_stream)
+
+    response = HttpResponse(output_stream.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="completed.pdf"'
+    input_stream.close()
+
+    return response
+
+
+def set_need_appearances_writer(writer):
+    try:
+        catalog = writer._root_object
+        # get the AcroForm tree and add "/NeedAppearances attribute
+        if "/AcroForm" not in catalog:
+            writer._root_object.update({
+                NameObject("/AcroForm"): IndirectObject(len(writer._objects), 0, writer)})
+
+        need_appearances = NameObject("/NeedAppearances")
+        writer._root_object["/AcroForm"][need_appearances] = BooleanObject(True)
+
+
+    except Exception as e:
+        print('set_need_appearances_writer() catch : ', repr(e))
+
+    return writer  

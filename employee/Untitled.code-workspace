@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "python.pythonPath": "env/bin/python3.8"
+    },
+    "folders": [
+        {
+            "path": "/Users/bhargavaganti/projects/pdffiller"
+        }
+    ]
+}
