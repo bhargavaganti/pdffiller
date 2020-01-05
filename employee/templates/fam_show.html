@@ -5,17 +5,22 @@
         <title>Family Health Card Records</title>
          {% load staticfiles %}
                 <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity
-                ="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+                $('#tale_data').DataTable();
+        } );            
+    </script>
     </head>
     <body>
     <a href="/index" class="btn btn-primary">Back Menu</a>
     <a href="/back" class="btn btn-primary">Print Back Page</a>
     <form action="" method="post">
-        {% load sorter_tags %}   
         {% csrf_token %}  
-    <table class="table table-striped table-bordered table-sm">
+    <table id="tale_data" class="table table-striped table-bordered table-sm">
         <thead class="thead-dark">
         <tr>
             <th></th>

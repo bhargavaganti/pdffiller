@@ -262,5 +262,3 @@ def merge_pdf_files_pdfrw(pdf_files, output_filename):
   output.trailer[PdfName('Root')][PdfName('AcroForm')] = output_acroform
   output.write(output_filename)
   return output_filename
-
-
