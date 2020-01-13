@@ -40,6 +40,22 @@
             </th>
         </tr>
         </thead>
+        <tfoot class="thead-dark">
+            <tr>
+                <th></th>
+                <th>Health Card ID</th>
+                <th>Full Name</th>
+                <th>Address</th>
+                <th>Aadhar Card</th>
+                <th>Mobile</th>
+                <th>Print Count</th>
+                <th>Is Paid</th>
+                <th>
+                    <!-- <a href="/fam/print/{{ family.Fid }}">Print</a> -->
+                    <button type="submit" name="print">Print</button>
+                </th>
+            </tr>
+            </tfoot>
         <tbody>
     {% for family in Families %}
         <tr>
