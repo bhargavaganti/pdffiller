@@ -28,6 +28,7 @@ urlpatterns = [
     path('accounts/login/', AuthViews.LoginView.as_view(), name='login'),
     path('accounts/logout/', AuthViews.LogoutView.as_view(next_page='/accounts/login/'), name='logout'),
     #Family Record URL's
+    path('export_fam', views.export_fam_xls),
     path('fam_show', views.fam_show),
     path('fam/add', views.fam_new),
     path('fam/edit/<int:id>', views.fam_edit),
@@ -36,6 +37,7 @@ urlpatterns = [
     path('fam/print/<int:id>', views.fam_print),
     path('fam/delete/<int:id>', views.fam_destroy),
     ##Individual Record URL's
+    path('export_ind', views.export_ind_xls),
     path('ind_show', views.ind_show),
     path('ind/add', views.ind_new),
     path('ind/paid/<int:id>', views.ind_paid),

@@ -3,6 +3,8 @@ import pdb
 import datetime
 import random 
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Extract,Cast,Trunc
+from django.db.models.fields import DateField
 # Create your views here.
 from django.shortcuts import render, redirect
 from employee.forms import  FamilyForm, IndividualForm, SearchForm, FamilyForm1, IndividualForm1
@@ -14,6 +16,8 @@ from django.http import HttpResponse
 from django.http import FileResponse
 from employee.filters import FamilyFilter, IndividualFilter
 import json
+import xlwt
+
 ANNOT_KEY = '/Annots'
 ANNOT_FIELD_KEY = '/T'
 ANNOT_VAL_KEY = '/V'
@@ -262,3 +266,65 @@ def merge_pdf_files_pdfrw(pdf_files, output_filename):
   output.trailer[PdfName('Root')][PdfName('AcroForm')] = output_acroform
   output.write(output_filename)
   return output_filename
+
+def export_ind_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Individual_Health_card_Details.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Individuals_Health_Card_Data') # this will make a sheet named Users Data
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['ID', 'Name', 'contact', 'aadhar card','address1','address2','address3','ration card','aarogya sri','from_date' , 'to date',  ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style) # at 0 row 0 column 
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Individual.objects.all().values_list('Fid', 'Fname', 'Fcontact', 'Faadhar','Faddress1','Faddress2','Faddress3','Fration','Farogya','from_date','to_date',)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+
+    return response
+
+def export_fam_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Family_Health_card_Details.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Family_Health_Card_Data') # this will make a sheet named Users Data
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['ID', 'Name', 'contact', 'aadhar card','address1','address2','address3','Family Member 1','Aadhar card 1','Family Member 2','Aadhar card 2','Family Member 3','Aadhar card 3','Family Member 4','Aadhar card 4','ration card','aarogya sri','from_date' , 'to date',  ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style) # at 0 row 0 column 
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Family.objects.all().values_list('Fid', 'Fname', 'Fcontact', 'Faadhar','Faddress1','Faddress2','Faddress3','Member_1_name','Member_1_aadhar','Member_2_name','Member_2_aadhar','Member_3_name','Member_3_aadhar','Member_4_name','Member_4_aadhar','Fration','Farogya','from_date','to_date',)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+
+    return response
